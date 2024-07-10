@@ -1,21 +1,20 @@
+
 services:
-  
   front-end:
-  container_name: react
-  image: node:lts-alpine # nodeを扱えるAlpine Linuxをもとに作られているイメージ 超軽量
-  working_dir: /app
-  volumes: # dockerの管理下でストレージ領域の確保
-    - ./app:/app
-  command: sh -c "npm run dev"
-  tty: true # 仮想端末を配置するコマンド dev/ptsといったところに仮想端末が管理されておりそいつを操作しているみたい。
-  ports:
-    - ${REACT_PORT}:3000 # ホスト側のport番号:docker側のport番号 
-  enviroment: # コンテナ内で使用されtる環境変数の設定
-    # TODO-今わからないので後で記入
-  
+    container_name: app
+    image: node:lts-alpine # nodeを扱えるAlpine Linuxをもとに作られているイメージ 超軽量
+    working_dir: /app
+    volumes: # dockerの管理下でストレージ領域の確保
+      - ./app:/app
+    command: sh -c "npm run dev"
+    tty: true # 仮想端末を配置するコマンド dev/ptsといったところに仮想端末が管理されておりそいつを操作しているみたい。
+    ports:
+      - ${REACT_PORT}:3000 # ホスト側のport番号:docker側のport番号 
+    # enviroment: # コンテナ内で使用されtる環境変数の設定
+      # TODO-今わからないので後で記入
   api: # expressによるAPI処理
     container_name: api
-    iamge: node:lts-alpine
+    image: node:lts-alpine
     working_dir: /app
     volumes: 
       - ./api:/app
@@ -23,7 +22,7 @@ services:
     tty: true
     ports:
       - ${EXPRESS_PORT}:3000
-    enviroment: # コンテナ内で使用される環境変数の設定
+    environment: # コンテナ内で使用される環境変数の設定
       - DB_HOST=db
       - DB_PORT=${MYSQL_PORT}
       - DB_USER=${MYSQL_USER}
@@ -32,18 +31,19 @@ services:
       - CORS_URL=${CORS_URL}
     depends_on: # 依存関係の設定
       #今回はservice:dbをservice:apiに依存させている
-      - db 
-    
-  db:
+      - db    
+  db: 
     container_name: db
-    iamge: mysql:latest
+    image: mysql:latest
     restart: always # dbの再起動のまつわる設定を行う。
     ports:
       - ${MYSQL_PORT}:${MYSQL_PORT}
-    enviroment:
+    environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - TZ=Asia/Tokyo
     volumes:
-      - ./initdb.d:/docker-entrypoint-initdb.d
+      # Mysqlのimageにおけるdocker-entrypoint-initdb.dという場所にimage起動時に初期化を行うファイルを設定 
+      - ./initdb.d:/docker-entrypoint-initdb.d 
+      # 設定ファイルを読み込む
       - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf

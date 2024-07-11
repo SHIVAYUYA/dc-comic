@@ -9,9 +9,9 @@ services:
     command: sh -c "npm run dev"
     tty: true # 仮想端末を配置するコマンド dev/ptsといったところに仮想端末が管理されておりそいつを操作しているみたい。
     ports:
-      - ${REACT_PORT}:3000 # ホスト側のport番号:docker側のport番号 
-    # enviroment: # コンテナ内で使用されtる環境変数の設定
-      # TODO-今わからないので後で記入
+      - ${REACT_PORT}:5173 # ホスト側のport番号:docker側のport番号 
+    environment: # コンテナ内で使用されtる環境変数の設定
+      - VITE_API_URL=${API_URL}
   api: # expressによるAPI処理
     container_name: api
     image: node:lts-alpine

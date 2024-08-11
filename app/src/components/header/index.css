@@ -3,3 +3,16 @@
     padding:0;
 }
 
+.header__inner {
+    display: flex;
+    height:75px;
+    width: 100%;
+    align-items: center;
+    background-color: #60926B;
+}
+
+.header_title{
+    padding-left: 1rem;
+    font-size: 2rem;
+    margin-left: 2vw;
+}

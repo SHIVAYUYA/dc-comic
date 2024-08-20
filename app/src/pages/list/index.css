@@ -1,0 +1,9 @@
+.bookList__layout{
+    align-content: flex-start;
+    background-color: #DAE0D7;
+    display: flex;
+    flex-wrap: wrap;
+    width: 80vw;
+    height: 80vh;
+}
+

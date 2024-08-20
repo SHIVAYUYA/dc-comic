@@ -13,10 +13,11 @@ router.post('/api/post',async function(req, res, next) {
   
   console.log(req.body);
   const bookName = req.body.bookName;
+  const bookType = req.body.bookType;
   const startNumber = req.body.startNumber;
   const finishNumber = req.body.finishNumber;
 
-  if (!bookName || !startNumber || !finishNumber) {
+  if (!bookName || !bookType || !startNumber || !finishNumber) {
     res.status(400).json({message: "データが不足しています"})
     return
   }
@@ -25,9 +26,9 @@ router.post('/api/post',async function(req, res, next) {
 
   try {
     const query =
-      "insert into library (book_name, book_start_number, book_finish_number) values (?, ?, ?)"; // SQLの基本、後から値を指定できるインジェクション対策にもなる
+      "insert into library (book_name, book_type, book_start_number, book_finish_number) values (?, ?, ?, ?)"; // SQLの基本、後から値を指定できるインジェクション対策にもなる
     // SQL実行
-    await connection.execute(query, [bookName, startNumber, finishNumber]);
+    await connection.execute(query, [bookName, bookType, startNumber, finishNumber]);
     res.status(200).json({message: "success"})
   } catch (error) {
       console.error('/api/post Error:', error);
@@ -45,7 +46,7 @@ router.get('/api/post', async (req, res, next) => {
 
     // sql文
     const query =
-      "select book_id, book_name, book_start_number, book_finish_number, book_at from library";
+      "select book_id, book_name, book_type, book_start_number, book_finish_number, book_at from library";
     // SQL実行
     const [result] = await connection.execute(query);
 
@@ -53,6 +54,7 @@ router.get('/api/post', async (req, res, next) => {
     const posts = result.map(post => ({
       bookId: post.post_id,
       bookName: post.book_name,
+      bookType: post.book_type,
       startNumber: post.book_start_number,
       finishNumber: post.book_finish_number,
       bookAt: post.book_at

@@ -2,9 +2,15 @@ import './index.css'
 
 export const BooksPool = function (props) {
     console.log(props);
-    return <tr>
-                <td>書籍名:{props.bookName}</td>
-                <td>始巻:{props.startNumber}</td>
-                <td>終巻:{props.finishNumber}</td>
-            </tr>
+    return  <div className="bookList__box">
+                <div className='bookList'>
+
+                    <h2 className='bookList__name'>{props.bookName}</h2>
+
+                    <div className='bookList__content'>
+                        <p className='bookList__content__text'>ジャンル:{props.bookType}</p>
+                        <p className='bookList__content__number'>{props.startNumber} ~ {props.finishNumber}</p>
+                    </div>
+                </div>
+            </div>
 }
